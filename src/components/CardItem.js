@@ -17,6 +17,7 @@ export default class CardItem extends Component {
       <CardView>
         <p>{text}</p>
       </CardView>
+
     );
   }
 }

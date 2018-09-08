@@ -38,6 +38,8 @@ export default class SoundVisualizer extends Component {
           adjustedLength =
             Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 1);
           adjustedLength = adjustedLength < 80 ? 0 : adjustedLength - 80;
+          // adjustedLength = adjustedLength > 100 ? 100 : adjustedLength;
+          adjustedLength *= 0.6;
 
           paths[i].setAttribute('d', 'M ' + i + ',255 l 0,-' + adjustedLength);
         }

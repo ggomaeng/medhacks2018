@@ -63,6 +63,7 @@ export default class App extends Component {
       <div>
         <CardList data={columns[1]} />
       </div>
+
     );
   }
 

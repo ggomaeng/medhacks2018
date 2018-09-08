@@ -40,7 +40,6 @@ module.exports = {
           plugins: [
             'transform-decorators-legacy',
             'transform-async-to-generator',
-            'styled-components'
           ]
         }
       },
