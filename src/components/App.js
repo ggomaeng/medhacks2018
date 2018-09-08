@@ -6,7 +6,7 @@ import DevTools from 'mobx-react-devtools';
 import styled, { keyframes } from 'styled-components';
 import FlexView from 'react-flexview';
 import withSizes from 'react-sizes';
-
+import Transition from 'react-transition-group/Transition';
 import TopBar from './TopBar';
 import Speech from './Speech';
 import SoundVisualizer from './SoundVisualizer';
@@ -89,9 +89,33 @@ export default class App extends Component {
     );
   }
 
+  renderBottom() {
+    const { showPatientHistory } = this.store;
+
+    if (showPatientHistory) {
+      const fadeIn = keyframes`
+		0% {
+		 opacity: 0;
+	   }
+	 
+	   100% {
+		 opacity: 1;
+	   }
+	 `;
+      const AnimatedFlexView = styled.div`
+        display: flex;
+        flex-grow: 3;
+        background-color: #008dcd;
+        ${'' /* animation: ${fadeIn} 1s linear forwards; */};
+      `;
+
+      return <AnimatedFlexView>{this.renderCardItems()}</AnimatedFlexView>;
+    }
+  }
+
   render() {
     const { width, height } = this.props;
-    const { muted } = this.store;
+    const { muted, showPatientHistory } = this.store;
     return (
       <div className="wrapper">
         <Speech />
@@ -106,9 +130,7 @@ export default class App extends Component {
             {this.renderWords()}
             {this.renderMic()}
           </FlexView>
-          <FlexView grow={3} style={{ backgroundColor: '#008dcd' }}>
-            {this.renderCardItems()}
-          </FlexView>
+          {this.renderBottom()}
         </FlexView>
       </div>
     );

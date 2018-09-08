@@ -30,8 +30,12 @@ export default class AppState {
   @observable
   columns;
 
+  @observable
+  showPatientHistory;
+
   constructor() {
     this.muted = false;
+    this.showPatientHistory = false;
     this.words = [];
     this.finalTranscript = '';
     this.columns = {
@@ -52,10 +56,18 @@ export default class AppState {
       console.log("muted, shouldn't listen");
       return;
     }
+
+    if (
+      !this.showPatientHistory &&
+      finalTranscript.indexOf('patient history') != -1
+    ) {
+      this.showPatientHistory = true;
+    }
+
     console.log('final transcript', finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 0 && finalTranscript.length < 280) {
-      this.sendToWit(finalTranscript);
+      // this.sendToWit(finalTranscript);
     }
   }
 
@@ -66,6 +78,7 @@ export default class AppState {
 
   @action
   toggleMic() {
+    this.finalTranscript = '';
     this.muted = !this.muted;
     console.log('muted', this.muted);
   }
