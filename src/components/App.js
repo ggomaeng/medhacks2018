@@ -15,6 +15,11 @@ import CardList from './CardList';
 
 import mic_on from '../images/icons8-microphone.png';
 import mic_off from '../images/icons8-block_microphone.png';
+import person from '../images/icons8-user_group_man_woman.png';
+
+import { INTENT_TYPES } from '../stores/AppState';
+import ProfilePage from './ProfilePage';
+import AppointmentPage from './AppointmentPage';
 
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
@@ -66,13 +71,27 @@ export default class App extends Component {
   }
 
   renderCardItems() {
-    const { columns } = this.store;
+    const { currentIndex, pages } = this.store;
     return (
-      <div>
-        <CardList column={1} />
-      </div>
-
+      <FlexView
+        grow={1}
+        style={{
+          backgroundColor: pages[currentIndex].backgroundColor,
+          padding: 16
+        }}
+      >
+        {this.renderPage()}
+      </FlexView>
     );
+  }
+
+  renderPage() {
+    const { currentIndex, pages } = this.store;
+    if (currentIndex == 0) {
+      return <ProfilePage />;
+    } else if (currentIndex == 3) {
+      return <AppointmentPage />;
+    }
   }
 
   renderMic() {
@@ -91,9 +110,7 @@ export default class App extends Component {
   }
 
   renderBottom() {
-    const { showPatientHistory } = this.store;
-
-    if (showPatientHistory) {
+    if (this.store.columnsHaveItem()) {
       const fadeIn = keyframes`
 		0% {
 		 opacity: 0;
@@ -106,12 +123,56 @@ export default class App extends Component {
       const AnimatedFlexView = styled.div`
         display: flex;
         flex-grow: 3;
-        background-color: #008dcd;
+        flex-direction: column;
         ${'' /* animation: ${fadeIn} 1s linear forwards; */};
       `;
 
-      return <AnimatedFlexView>{this.renderCardItems()}</AnimatedFlexView>;
+      return (
+        <AnimatedFlexView>
+          {this.renderCardItems()}
+          {this.renderFooter()}
+        </AnimatedFlexView>
+      );
     }
+  }
+
+  renderFooter() {
+    const { pages, currentIndex } = this.store;
+    const Footer = styled.div`
+      display: flex;
+      flex-direction: 'row';
+      align-items: center;
+      padding: 16px;
+      background: ${pages[currentIndex].backgroundColor};
+    `;
+
+    const P = styled.h4`
+      color: white;
+    `;
+
+    return (
+      <Footer>
+        {Object.keys(pages).map((i, index) => {
+          const Icon = styled.img`
+            width: ${index === currentIndex ? '64px' : '48px'};
+            height: ${index === currentIndex ? '64px' : '48px'};
+            padding: 8px;
+            background: white;
+            border-radius: 48px;
+            margin-right: 16px;
+          `;
+
+          return (
+            <Icon
+              onClick={() => this.store.setIndex(index)}
+              key={index}
+              src={pages[i].icon}
+            />
+          );
+        })}
+        <P>{pages[currentIndex].name}</P>
+      </Footer>
+    );
   }
 
   render() {
@@ -122,10 +183,13 @@ export default class App extends Component {
         <Speech />
         <FlexView column style={{ width, height }}>
           <FlexView
-            grow={1}
             vAlignContent={'center'}
             hAlignContent={'center'}
-            style={{ backgroundColor: 'white', position: 'relative' }}
+            style={{
+              backgroundColor: 'white',
+              position: 'relative',
+              height: height / 4
+            }}
           >
             {!muted && <SoundVisualizer />}
             {this.renderWords()}

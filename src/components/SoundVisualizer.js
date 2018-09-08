@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
+import { observer, inject } from 'mobx-react';
 
+@inject('store')
+@observer
 export default class SoundVisualizer extends Component {
+  constructor(props) {
+    super(props);
+    this.store = this.props.store.appState;
+  }
+
   componentDidMount() {
     var paths = document.getElementsByTagName('path');
     var visualizer = document.getElementById('visualizer');
@@ -70,6 +78,8 @@ export default class SoundVisualizer extends Component {
   componentWillUnmount() {}
 
   render() {
+    const { currentIndex, pages } = this.store;
+
     return (
       <svg
         preserveAspectRatio="none"
@@ -85,19 +95,31 @@ export default class SoundVisualizer extends Component {
           <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop
               offset="0%"
-              style={{ stopColor: '#B3E5FC', stopOpacity: 1 }}
+              style={{
+                stopColor: pages[currentIndex].backgroundColor,
+                stopOpacity: 1
+              }}
             />
             <stop
               offset="20%"
-              style={{ stopColor: '#4FC3F7', stopOpacity: 1 }}
+              style={{
+                stopColor: pages[currentIndex].backgroundColor,
+                stopOpacity: 1
+              }}
             />
             <stop
               offset="90%"
-              style={{ stopColor: '#03A9F4', stopOpacity: 1 }}
+              style={{
+                stopColor: pages[currentIndex].backgroundColor,
+                stopOpacity: 1
+              }}
             />
             <stop
               offset="100%"
-              style={{ stopColor: '#008dcd', stopOpacity: 1 }}
+              style={{
+                stopColor: pages[currentIndex].backgroundColor,
+                stopOpacity: 1
+              }}
             />
           </linearGradient>
         </defs>

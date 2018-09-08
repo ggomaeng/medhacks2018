@@ -7,6 +7,7 @@ export default class CardItem extends Component {
 
     const CardView = styled.div`
       width: 300px;
+      height: 300px;
       padding: 24px;
       background: white;
       margin: 16px;
@@ -17,7 +18,6 @@ export default class CardItem extends Component {
       <CardView>
         <p>{data.text}</p>
       </CardView>
-
     );
   }
 }

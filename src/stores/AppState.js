@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import users from './users';
 
 const { Wit, log } = require('node-wit');
 
@@ -9,15 +10,22 @@ const client = new Wit({
   // logger: new log.Logger(log.DEBUG) // optional
 });
 
-const INTENT_DESCRIPTION = 'description';
-const INTENT_SYMPTOMS = 'symptoms';
-const INTENT_DIAGNOSIS = 'diagnosis';
-const INTENT_PRESCRIPTION = 'prescription';
-const INTENT_PRESCRIPTION_PICK_UP = 'prescription_pickup';
-const INTENT_QUERY_HISTORY = 'query_history';
-const INTENT_RECALL_HISTORY = 'recall_history';
+export const INTENT_TYPES = {
+  INTENT_DESCRIPTION: 'description',
+  INTENT_SYMPTOMS: 'symptoms',
+  INTENT_DIAGNOSIS: 'diagnosis',
+  INTENT_PRESCRIPTION: 'prescription',
+  INTENT_PRESCRIPTION_PICK_UP: 'prescription_pickup',
+  INTENT_QUERY_HISTORY: 'query_history',
+  INTENT_RECALL_HISTORY: 'recall_history'
+};
+
+export const PAGE_TYPES = [];
 
 export default class AppState {
+  @observable
+  currentIndex;
+
   @observable
   muted;
 
@@ -31,17 +39,70 @@ export default class AppState {
   columns;
 
   @observable
-  showPatientHistory;
+  pages;
+
+  @observable
+  currentUser;
 
   constructor() {
-    this.muted = false;
+    this.currentIndex = 0;
+    this.muted = true;
     this.showPatientHistory = false;
     this.words = [];
     this.finalTranscript = '';
+    this.currentUser = users.Jisoo;
+    //data
     this.columns = {
-      1: [{ id: 'hello', text: 'hello' }],
-      2: [{ id: 'hi', text: 'hi' }]
+      [INTENT_TYPES.INTENT_DESCRIPTION]: [{ id: 'hello', text: 'hello' }],
+      [INTENT_TYPES.INTENT_SYMPTOMS]: [{ id: 'hi', text: 'hi' }]
     };
+
+    this.pages = {
+      0: {
+        page: 0,
+        name: 'Profile',
+        data: [0, 1, 2, 3],
+        backgroundColor: '#008dcd',
+        icon: require('../images/icons8-user_group_man_woman.png')
+      },
+      1: {
+        page: 1,
+        data: [],
+        name: 'Symptoms',
+        backgroundColor: '#ef5350',
+        icon: require('../images/icons8-bandage.png')
+      },
+      2: {
+        page: 2,
+        data: [],
+        name: 'Prescription',
+        backgroundColor: '#4CAF50',
+        icon: require('../images/icons8-pill.png')
+      },
+      3: {
+        page: 3,
+        data: [],
+        name: 'Appointments',
+        backgroundColor: '#7E57C2',
+        icon: require('../images/icons8-calendar.png')
+      }
+    };
+  }
+
+  @action
+  setIndex(i) {
+    this.currentIndex = i;
+  }
+
+  columnsHaveItem() {
+    let hasItem = false;
+    Object.keys(this.columns).map(c => {
+      if (this.columns[c].length > 0) {
+        hasItem = true;
+      }
+    });
+
+    return hasItem;
   }
 
   @action
@@ -61,13 +122,6 @@ export default class AppState {
     if (this.muted) {
       console.log("muted, shouldn't listen");
       return;
-    }
-
-    if (
-      !this.showPatientHistory &&
-      finalTranscript.indexOf('patient history') != -1
-    ) {
-      this.showPatientHistory = true;
     }
 
     console.log('final transcript', finalTranscript);
@@ -102,11 +156,11 @@ export default class AppState {
             entities && entities.intent && entities.intent[0].value;
           if (intent_type) {
             switch (intent_type) {
-              case INTENT_SYMPTOMS:
+              case INTENT_TYPES.INTENT_SYMPTOMS:
                 console.log('symptoms!!!');
-                console.log(entities.symptom[0].value);
+                console.log(entities.symptom[INTENT_SYMPTOMS].value);
                 this.addWord(1, entities.symptom[0].value);
-                console.log(JSON.stringify(this.columns[1]))
+                console.log(JSON.stringify(this.columns[INTENT_SYMPTOMS]));
                 break;
             }
           }
