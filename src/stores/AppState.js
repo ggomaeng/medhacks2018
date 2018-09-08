@@ -40,7 +40,7 @@ export default class AppState {
     this.finalTranscript = '';
     this.columns = {
       1: [{ id: 'hello', text: 'hello' }],
-      2: [{ id: 'hi', text: 'hi'}]
+      2: [{ id: 'hi', text: 'hi' }]
     };
   }
 
@@ -53,7 +53,7 @@ export default class AppState {
   @action
   addWord(columnNum, word) {
     // this.columns[1].text = word;
-    this.columns[columnNum].push({text: word});
+    this.columns[columnNum].push({ text: word });
   }
 
   @action
