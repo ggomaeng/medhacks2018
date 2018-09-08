@@ -69,7 +69,7 @@ export default class App extends Component {
     const { columns } = this.store;
     return (
       <div>
-        <CardList data={columns[1]} />
+        <CardList column={1} />
       </div>
 
     );

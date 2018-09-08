@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export default class CardItem extends Component {
   render() {
-    const { text } = this.props;
+    const { data } = this.props;
 
     const CardView = styled.div`
       width: 300px;
@@ -15,7 +15,7 @@ export default class CardItem extends Component {
 
     return (
       <CardView>
-        <p>{text}</p>
+        <p>{data.text}</p>
       </CardView>
 
     );
