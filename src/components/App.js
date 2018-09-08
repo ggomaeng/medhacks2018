@@ -81,7 +81,7 @@ export default class App extends Component {
             {this.renderWords()}
             <SoundVisualizer />
           </FlexView>
-          <FlexView grow={2} style={{ backgroundColor: '#008dcd' }}>
+          <FlexView grow={3} style={{ backgroundColor: '#008dcd' }}>
             {this.renderCardItems()}
           </FlexView>
         </FlexView>

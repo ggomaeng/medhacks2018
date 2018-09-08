@@ -28,6 +28,7 @@ export default class AppState {
 
   @action
   setFinalTranscript(finalTranscript) {
+    console.log('final transcript', finalTranscript);
     this.finalTranscript = finalTranscript;
   }
 

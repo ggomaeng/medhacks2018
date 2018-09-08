@@ -21,7 +21,7 @@ class Speech extends Component {
     this.toggleListen = this.toggleListen.bind(this);
     this.handleListen = this.handleListen.bind(this);
     this.store = this.props.store.appState;
-    this.setFinalTranscript = _.debounce(this.setFinalTranscript, 300);
+    this.setFinalTranscript = _.debounce(this.setFinalTranscript, 100);
     console.log(this.props);
   }
 
