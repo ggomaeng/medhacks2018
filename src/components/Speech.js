@@ -21,8 +21,7 @@ class Speech extends Component {
     this.toggleListen = this.toggleListen.bind(this);
     this.handleListen = this.handleListen.bind(this);
     this.store = this.props.store.appState;
-    this.setFinalTranscript = _.debounce(this.setFinalTranscript, 100);
-    console.log(this.props);
+    this.setFinalTranscript = _.debounce(this.setFinalTranscript, 300);
   }
 
   componentDidMount() {
@@ -57,13 +56,13 @@ class Speech extends Component {
     if (this.state.listening) {
       recognition.start();
       recognition.onend = () => {
-        console.log('...continue listening...');
+        // console.log('...continue listening...');
         recognition.start();
       };
     } else {
       recognition.stop();
       recognition.onend = () => {
-        console.log('Stopped listening per click');
+        // console.log('Stopped listening per click');
       };
     }
 
@@ -89,7 +88,7 @@ class Speech extends Component {
 
       const transcriptArr = finalTranscript.split(' ');
       const stopCmd = transcriptArr.slice(-3, -1);
-      console.log('stopCmd', stopCmd);
+      //   console.log('stopCmd', stopCmd);
 
       if (stopCmd[0] === 'stop' && stopCmd[1] === 'listening') {
         recognition.stop();
@@ -111,7 +110,7 @@ class Speech extends Component {
 
   render() {
     return (
-      <div style={container}>
+      <div>
         {/* <div id="interim" style={interim} /> */}
         {/* <div id="final" style={final} /> */}
       </div>
@@ -122,35 +121,3 @@ class Speech extends Component {
 export default Speech;
 
 //-------------------------CSS------------------------------------
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center'
-  },
-  button: {
-    width: '60px',
-    height: '60px',
-    background: 'lightblue',
-    borderRadius: '50%',
-    margin: '6em 0 2em 0'
-  },
-  interim: {
-    color: 'gray',
-    border: '#ccc 1px solid',
-    padding: '1em',
-    margin: '1em',
-    width: '300px'
-  },
-  final: {
-    color: 'black',
-    border: '#ccc 1px solid',
-    padding: '1em',
-    margin: '1em',
-    width: '300px'
-  }
-};
-
-const { container, button, interim, final } = styles;

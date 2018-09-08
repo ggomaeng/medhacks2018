@@ -6,8 +6,8 @@ export default class CardItem extends Component {
     const { text } = this.props;
 
     const CardView = styled.div`
-      width: 300px;
-      padding: 24px;
+      width: 3100px;
+      height: 100px;
       background: white;
       margin: 16px;
       border-radius: 16px;

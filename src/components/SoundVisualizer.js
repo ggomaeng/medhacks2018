@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 
 export default class SoundVisualizer extends Component {
   componentDidMount() {
@@ -21,13 +20,13 @@ export default class SoundVisualizer extends Component {
       analyser.fftSize = 1024;
 
       var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
-      visualizer.setAttribute('viewBox', '0 0 255 255');
+      visualizer && visualizer.setAttribute('viewBox', '0 0 255 255');
 
       //Through the frequencyArray has a length longer than 255, there seems to be no
       //significant data after this point. Not worth visualizing.
       for (var i = 0; i < 255; i++) {
         path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('stroke-dasharray', '4,1');
+        path && path.setAttribute('stroke-dasharray', '4,1');
         mask.appendChild(path);
       }
       var doDraw = function() {
@@ -39,7 +38,12 @@ export default class SoundVisualizer extends Component {
             Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 1);
           adjustedLength = adjustedLength < 80 ? 0 : adjustedLength - 80;
 
-          paths[i].setAttribute('d', 'M ' + i + ',255 l 0,-' + adjustedLength);
+          paths &&
+            paths[i] &&
+            paths[i].setAttribute(
+              'd',
+              'M ' + i + ',255 l 0,-' + adjustedLength
+            );
         }
       };
       doDraw();
@@ -54,8 +58,15 @@ export default class SoundVisualizer extends Component {
                               navigator.webkitGetUserMedia ||
                               navigator.mozGetUserMedia    ||
                               null;*/
-    navigator.getUserMedia({ audio: true }, soundAllowed, soundNotAllowed);
+    this.track = navigator.getUserMedia(
+      { audio: true },
+      soundAllowed,
+      soundNotAllowed
+    );
   }
+
+  componentWillUnmount() {}
+
   render() {
     return (
       <svg

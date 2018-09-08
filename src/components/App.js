@@ -13,6 +13,9 @@ import SoundVisualizer from './SoundVisualizer';
 import CardItem from './CardItem';
 import CardList from './CardList';
 
+import mic_on from '../images/icons8-microphone.png';
+import mic_off from '../images/icons8-block_microphone.png';
+
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
 @inject('store')
@@ -29,7 +32,7 @@ export default class App extends Component {
     if (e) e.preventDefault();
   }
   renderWords() {
-    const { finalTranscript } = this.store;
+    const { finalTranscript, muted } = this.store;
     const fadeInUp = keyframes`
    0% {
 	top: 3rem;
@@ -45,16 +48,21 @@ export default class App extends Component {
       height: 48px;
       animation: ${fadeInUp} 1s linear forwards;
       font-size: 1.8rem;
-      color: #008dcd;
+      color: ${muted ? 'gray' : '#008dcd'};
       font-family: 'Lato', sans-serif;
     `;
-    return (
-      <FadeInUp>
-        {finalTranscript
-          ? finalTranscript[0].toUpperCase() + finalTranscript.substring(1)
-          : '  '}
-      </FadeInUp>
-    );
+
+    let content;
+
+    if (muted) {
+      content = 'Muted';
+    } else {
+      content = finalTranscript
+        ? finalTranscript[0].toUpperCase() + finalTranscript.substring(1)
+        : '  ';
+    }
+
+    return <FadeInUp>{content}</FadeInUp>;
   }
 
   renderCardItems() {
@@ -66,8 +74,24 @@ export default class App extends Component {
     );
   }
 
+  renderMic() {
+    const { muted } = this.store;
+    const mutedStyle = muted
+      ? { width: 46, height: 46, marginLeft: 6, marginBottom: 4 }
+      : { width: 48, height: 48 };
+    return (
+      <div
+        onClick={() => this.store.toggleMic()}
+        style={{ position: 'absolute', bottom: 0 }}
+      >
+        <img src={muted ? mic_off : mic_on} style={mutedStyle} />
+      </div>
+    );
+  }
+
   render() {
     const { width, height } = this.props;
+    const { muted } = this.store;
     return (
       <div className="wrapper">
         <Speech />
@@ -78,8 +102,9 @@ export default class App extends Component {
             hAlignContent={'center'}
             style={{ backgroundColor: 'white', position: 'relative' }}
           >
+            {!muted && <SoundVisualizer />}
             {this.renderWords()}
-            <SoundVisualizer />
+            {this.renderMic()}
           </FlexView>
           <FlexView grow={3} style={{ backgroundColor: '#008dcd' }}>
             {this.renderCardItems()}
