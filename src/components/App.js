@@ -10,6 +10,8 @@ import withSizes from 'react-sizes';
 import TopBar from './TopBar';
 import Speech from './Speech';
 import SoundVisualizer from './SoundVisualizer';
+import CardItem from './CardItem';
+import CardList from './CardList';
 
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
@@ -40,6 +42,7 @@ export default class App extends Component {
   }
 `;
     const FadeInUp = styled.div`
+      height: 48px;
       animation: ${fadeInUp} 1s linear forwards;
       font-size: 1.8rem;
       color: #008dcd;
@@ -53,6 +56,16 @@ export default class App extends Component {
       </FadeInUp>
     );
   }
+
+  renderCardItems() {
+    const { columns } = this.store;
+    return (
+      <div>
+        <CardList data={columns[1]} />
+      </div>
+    );
+  }
+
   render() {
     const { width, height } = this.props;
     return (
@@ -68,7 +81,9 @@ export default class App extends Component {
             {this.renderWords()}
             <SoundVisualizer />
           </FlexView>
-          <FlexView grow={3} style={{ backgroundColor: '#008dcd' }} />
+          <FlexView grow={2} style={{ backgroundColor: '#008dcd' }}>
+            {this.renderCardItems()}
+          </FlexView>
         </FlexView>
       </div>
     );

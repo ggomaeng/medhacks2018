@@ -36,7 +36,9 @@ export default class SoundVisualizer extends Component {
         var adjustedLength;
         for (var i = 0; i < 255; i++) {
           adjustedLength =
-            Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
+            Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 1);
+          adjustedLength = adjustedLength < 80 ? 0 : adjustedLength - 80;
+
           paths[i].setAttribute('d', 'M ' + i + ',255 l 0,-' + adjustedLength);
         }
       };
@@ -70,15 +72,15 @@ export default class SoundVisualizer extends Component {
           <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop
               offset="0%"
-              style={{ stopColor: '#ff0a0a', stopOpacity: 1 }}
+              style={{ stopColor: '#B3E5FC', stopOpacity: 1 }}
             />
             <stop
               offset="20%"
-              style={{ stopColor: '#f1ff0a', stopOpacity: 1 }}
+              style={{ stopColor: '#4FC3F7', stopOpacity: 1 }}
             />
             <stop
               offset="90%"
-              style={{ stopColor: '#d923b9', stopOpacity: 1 }}
+              style={{ stopColor: '#03A9F4', stopOpacity: 1 }}
             />
             <stop
               offset="100%"

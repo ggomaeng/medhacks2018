@@ -8,19 +8,31 @@ export default class AppState {
   @observable
   finalTranscript;
 
+  @observable
+  columns;
+
   constructor() {
     this.words = [];
     this.finalTranscript = '';
+    this.columns = {
+      1: [{ id: 'hello', text: 'hello' }],
+      2: []
+    };
   }
 
   @action
   addWord(word) {
     console.log('adding word', word);
-    this.words = this.words.concat(word);
+    this.words.push(word);
   }
 
   @action
   setFinalTranscript(finalTranscript) {
     this.finalTranscript = finalTranscript;
+  }
+
+  @action
+  addColumnItem(columnNum, item) {
+    this.columns[columnNum].push(item);
   }
 }
