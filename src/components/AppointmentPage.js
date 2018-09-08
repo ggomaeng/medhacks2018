@@ -11,6 +11,7 @@ import enUS from 'rc-calendar/lib/locale/en_US';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
+import FlexView from 'react-flexview/lib';
 
 const format = 'YYYY-MM-DD';
 const cn = location.search.indexOf('cn') !== -1;
@@ -42,7 +43,7 @@ export default class Appointment extends React.Component {
 
   render() {
     return (
-      <div style={{ zIndex: 1000, position: 'relative' }}>
+      <FlexView grow={1}>
         {/* <FullCalendar
           style={{ margin: 10 }}
           Select={Select}
@@ -61,7 +62,7 @@ export default class Appointment extends React.Component {
           onTypeChange={this.onTypeChange}
           locale={cn ? zhCN : enUS}
         />
-      </div>
+      </FlexView>
     );
   }
 }

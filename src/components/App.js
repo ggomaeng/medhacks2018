@@ -12,6 +12,7 @@ import Speech from './Speech';
 import SoundVisualizer from './SoundVisualizer';
 import CardItem from './CardItem';
 import CardList from './CardList';
+import SideBar from './SideBar';
 
 import mic_on from '../images/icons8-microphone.png';
 import mic_off from '../images/icons8-block_microphone.png';
@@ -87,9 +88,7 @@ export default class App extends Component {
 
   renderPage() {
     const { currentIndex, pages } = this.store;
-    if (currentIndex == 0) {
-      return <ProfilePage />;
-    } else if (currentIndex == 3) {
+    if (currentIndex == 2) {
       return <AppointmentPage />;
     }
   }
@@ -97,8 +96,8 @@ export default class App extends Component {
   renderMic() {
     const { muted } = this.store;
     const mutedStyle = muted
-      ? { width: 46, height: 46, marginLeft: 6, marginBottom: 4 }
-      : { width: 48, height: 48 };
+      ? { width: 46, height: 46, padding: 8, marginLeft: 6, marginBottom: 4 }
+      : { width: 48, height: 48, padding: 8 };
     return (
       <div
         onClick={() => this.store.toggleMic()}
@@ -175,27 +174,36 @@ export default class App extends Component {
     );
   }
 
+  renderSideBar() {
+    return <SideBar />;
+  }
+
   render() {
     const { width, height } = this.props;
     const { muted, showPatientHistory } = this.store;
     return (
       <div className="wrapper">
         <Speech />
-        <FlexView column style={{ width, height }}>
-          <FlexView
-            vAlignContent={'center'}
-            hAlignContent={'center'}
-            style={{
-              backgroundColor: 'white',
-              position: 'relative',
-              height: height / 4
-            }}
-          >
-            {!muted && <SoundVisualizer />}
-            {this.renderWords()}
-            {this.renderMic()}
+        <FlexView style={{ width, height }}>
+          <FlexView style={{ width: width / 6, backgroundColor: '#f7f7f7' }}>
+            {this.renderSideBar()}
           </FlexView>
-          {this.renderBottom()}
+          <FlexView column grow={1}>
+            <FlexView
+              vAlignContent={'center'}
+              hAlignContent={'center'}
+              style={{
+                backgroundColor: 'white',
+                position: 'relative',
+                height: height / 8
+              }}
+            >
+              {!muted && <SoundVisualizer />}
+              {this.renderWords()}
+              {this.renderMic()}
+            </FlexView>
+            {this.renderBottom()}
+          </FlexView>
         </FlexView>
       </div>
     );

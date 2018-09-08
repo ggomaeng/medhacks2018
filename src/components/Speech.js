@@ -81,6 +81,7 @@ class Speech extends Component {
       }
       //   document.getElementById('interim').innerHTML = interimTranscript;
       //   document.getElementById('final').innerHTML = finalTranscript;
+      this.store.changePage(interimTranscript);
       this.setFinalTranscript(finalTranscript);
       finalTranscript = '';
 

@@ -60,29 +60,24 @@ export default class AppState {
     this.pages = {
       0: {
         page: 0,
-        name: 'Profile',
-        data: [0, 1, 2, 3],
+        data: [],
+        name: 'Symptoms',
         backgroundColor: '#008dcd',
-        icon: require('../images/icons8-user_group_man_woman.png')
+        icon: require('../images/icons8-bandage.png')
       },
       1: {
         page: 1,
         data: [],
-        name: 'Symptoms',
-        backgroundColor: '#ef5350',
-        icon: require('../images/icons8-bandage.png')
+        name: 'Prescription',
+        backgroundColor: '#4CAF50',
+        // backgroundColor: '#ef5350',
+        icon: require('../images/icons8-pill.png')
       },
       2: {
         page: 2,
         data: [],
-        name: 'Prescription',
-        backgroundColor: '#4CAF50',
-        icon: require('../images/icons8-pill.png')
-      },
-      3: {
-        page: 3,
-        data: [],
         name: 'Appointments',
+        // backgroundColor: '#4CAF50',
         backgroundColor: '#7E57C2',
         icon: require('../images/icons8-calendar.png')
       }
@@ -124,11 +119,30 @@ export default class AppState {
       return;
     }
 
+    this.changePage(finalTranscript);
+
     console.log('final transcript', finalTranscript);
     // this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 0 && finalTranscript.length < 280) {
       // this.sendToWit(finalTranscript);
+    }
+  }
+
+  @action
+  changePage(keyword) {
+    if (this.muted) return;
+    if (keyword.indexOf('profile') != -1) {
+      this.currentIndex = 0;
+    } else if (keyword.indexOf('symptoms') != -1) {
+      this.currentIndex = 0;
+    } else if (
+      keyword.indexOf('prescription') != -1 ||
+      keyword.indexOf('medication') != -1
+    ) {
+      this.currentIndex = 1;
+    } else if (keyword.indexOf('appointment') != -1) {
+      this.currentIndex = 2;
     }
   }
 
