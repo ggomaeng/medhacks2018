@@ -21,6 +21,7 @@ import person from '../images/icons8-user_group_man_woman.png';
 import { INTENT_TYPES } from '../stores/AppState';
 import ProfilePage from './ProfilePage';
 import AppointmentPage from './AppointmentPage';
+import SummaryPage from './SummaryPage';
 
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
@@ -90,6 +91,8 @@ export default class App extends Component {
     const { currentIndex, pages } = this.store;
     if (currentIndex == 2) {
       return <AppointmentPage />;
+    } else if (currentIndex == 3) {
+      return <SummaryPage />;
     }
   }
 
@@ -185,7 +188,7 @@ export default class App extends Component {
       <div className="wrapper">
         <Speech />
         <FlexView style={{ width, height }}>
-          <FlexView style={{ width: width / 6, backgroundColor: '#f7f7f7' }}>
+          <FlexView style={{ width: width / 3, backgroundColor: '#f7f7f7' }}>
             {this.renderSideBar()}
           </FlexView>
           <FlexView column grow={1}>

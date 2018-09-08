@@ -19,6 +19,7 @@ export default class ProfilePage extends Component {
       border-radius: 48px;
     `;
     const H1 = styled.h1`
+      color: black;
       font-family: 'Lato', sans-serif;
     `;
     const P = styled.p`
@@ -36,10 +37,8 @@ export default class ProfilePage extends Component {
       <FlexView column hAlignContent="left" style={{ padding: 16 }}>
         <FlexView column>
           <H1>{currentUser.name}</H1>
-          <FlexView grow={1}>
-            <P>{currentUser.gender}</P>
-            <P>{currentUser.DOB}</P>
-          </FlexView>
+          <P>{currentUser.gender}</P>
+          <P>DOB: {currentUser.DOB}</P>
         </FlexView>
         <GeicoImg src={GEICO} />
       </FlexView>

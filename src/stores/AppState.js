@@ -69,8 +69,8 @@ export default class AppState {
         page: 1,
         data: [],
         name: 'Prescription',
-        backgroundColor: '#4CAF50',
-        // backgroundColor: '#ef5350',
+        backgroundColor: '#ef5350',
+        // backgroundColor: '#4CAF50',
         icon: require('../images/icons8-pill.png')
       },
       2: {
@@ -80,6 +80,14 @@ export default class AppState {
         // backgroundColor: '#4CAF50',
         backgroundColor: '#7E57C2',
         icon: require('../images/icons8-calendar.png')
+      },
+      3: {
+        page: 3,
+        data: [],
+        name: 'Summary',
+        backgroundColor: '#4CAF50',
+        // backgroundColor: '#7E57C2',
+        icon: require('../images/icons8-test_partial_passed.png')
       }
     };
   }
@@ -143,6 +151,8 @@ export default class AppState {
       this.currentIndex = 1;
     } else if (keyword.indexOf('appointment') != -1) {
       this.currentIndex = 2;
+    } else if (keyword.indexOf('summary') != -1) {
+      this.currentIndex = 3;
     }
   }
 

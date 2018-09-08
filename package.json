@@ -65,6 +65,7 @@
     "rc-select": "^8.2.6",
     "react": "^15.3.2",
     "react-big-calendar": "^0.19.2",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^15.3.2",
     "react-flexview": "^4.0.1",
     "react-router-dom": "latest",
