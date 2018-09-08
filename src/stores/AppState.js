@@ -40,7 +40,7 @@ export default class AppState {
     this.finalTranscript = '';
     this.columns = {
       1: [{ id: 'hello', text: 'hello' }],
-      2: []
+      2: [{ id: 'hi', text: 'hi'}]
     };
   }
 
@@ -48,6 +48,12 @@ export default class AppState {
   addWord(word) {
     console.log('adding word', word);
     this.words.push(word);
+  }
+
+  @action
+  addWord(columnNum, word) {
+    // this.columns[1].text = word;
+    this.columns[columnNum].push({text: word});
   }
 
   @action
@@ -65,6 +71,8 @@ export default class AppState {
     }
 
     console.log('final transcript', finalTranscript);
+    // this.columns[1].text = finalTranscript;
+    this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 0 && finalTranscript.length < 280) {
       // this.sendToWit(finalTranscript);
