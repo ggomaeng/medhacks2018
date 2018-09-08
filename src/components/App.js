@@ -188,7 +188,7 @@ export default class App extends Component {
       <div className="wrapper">
         <Speech />
         <FlexView style={{ width, height }}>
-          <FlexView style={{ width: width / 3, backgroundColor: '#f7f7f7' }}>
+          <FlexView style={{ width: width / 2, backgroundColor: '#f7f7f7' }}>
             {this.renderSideBar()}
           </FlexView>
           <FlexView column grow={1}>

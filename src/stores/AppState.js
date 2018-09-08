@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 import users from './users';
+import scrollToComponent from 'react-scroll-to-component';
+import SideBar from '../components/SideBar';
 
 const { Wit, log } = require('node-wit');
 
@@ -44,7 +46,10 @@ export default class AppState {
   @observable
   currentUser;
 
+  sideBarScrollTo;
+
   constructor() {
+    this.sideBarScrollTo = null;
     this.currentIndex = 0;
     this.muted = true;
     this.showPatientHistory = false;
@@ -90,6 +95,10 @@ export default class AppState {
         icon: require('../images/icons8-test_partial_passed.png')
       }
     };
+  }
+
+  setSideBarScrollTo(scrollTo) {
+    this.sideBarScrollTo = scrollTo;
   }
 
   @action
@@ -148,11 +157,20 @@ export default class AppState {
       keyword.indexOf('prescription') != -1 ||
       keyword.indexOf('medication') != -1
     ) {
+      this.sideBarScrollTo('medication');
       this.currentIndex = 1;
     } else if (keyword.indexOf('appointment') != -1) {
       this.currentIndex = 2;
     } else if (keyword.indexOf('summary') != -1) {
       this.currentIndex = 3;
+    }
+
+    if (keyword.indexOf('allerg') != -1) {
+      this.sideBarScrollTo('allergies');
+    } else if (keyword.indexOf('surg') != -1 || keyword.indexOf('medi') != -1) {
+      this.sideBarScrollTo('surgical');
+    } else if (keyword.indexOf('history') != -1) {
+      this.sideBarScrollTo('shistory');
     }
   }
 
