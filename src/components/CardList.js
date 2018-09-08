@@ -7,7 +7,7 @@ export default class CardList extends Component {
     return data.map((item, index) => {
       return (
         <CardItem key={index} text={this.props.data.text}/>
-        
+
       )
     })
   }
@@ -20,7 +20,5 @@ export default class CardList extends Component {
         {this.renderCards()}
       </div>
     )
-
-
   }
 }

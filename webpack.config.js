@@ -4,7 +4,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   node: {
-    fs: 'empty'
+    fs: 'empty',
+    readline: 'empty'
   },
   entry: [
     'react-hot-loader/patch',
@@ -39,7 +40,7 @@ module.exports = {
           presets: [['es2015', { modules: false }], 'stage-0', 'react'],
           plugins: [
             'transform-decorators-legacy',
-            'transform-async-to-generator',
+            'transform-async-to-generator'
           ]
         }
       },
@@ -79,6 +80,7 @@ module.exports = {
         exclude: /node_modules/,
         include: __dirname
       },
+      { test: /\.json$/, loader: 'json' },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: 'url-loader?limit=10000&mimetype=application/font-woff'
