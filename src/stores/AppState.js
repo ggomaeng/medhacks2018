@@ -59,8 +59,7 @@ export default class AppState {
       return;
     }
     console.log('final transcript', finalTranscript);
-    // this.columns[1].text = finalTranscript;
-    this.addWord(1, finalTranscript);
+    // this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 0 && finalTranscript.length < 280) {
       this.sendToWit(finalTranscript);
@@ -78,6 +77,7 @@ export default class AppState {
     console.log('muted', this.muted);
   }
 
+  @action
   sendToWit(message) {
     client
       .message(message, {})
@@ -91,6 +91,9 @@ export default class AppState {
             switch (intent_type) {
               case INTENT_SYMPTOMS:
                 console.log('symptoms!!!');
+                console.log(entities.symptom[0].value);
+                this.addWord(1, entities.symptom[0].value);
+                console.log(JSON.stringify(this.columns[1]))
                 break;
             }
           }
