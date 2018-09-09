@@ -24,6 +24,7 @@ import AppointmentPage from './AppointmentPage';
 import SummaryPage from './SummaryPage';
 import SymptomsPage from './SymptomsPage';
 import MedicationPage from './MedicationPage';
+import RealSummaryPage from './RealSummaryPage';
 
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
@@ -99,6 +100,8 @@ export default class App extends Component {
       return <AppointmentPage />;
     } else if (currentIndex == 3) {
       return <SummaryPage />;
+    } else if (currentIndex == 4) {
+      return <RealSummaryPage />;
     }
   }
 

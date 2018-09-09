@@ -106,6 +106,13 @@ export default class AppState {
         backgroundColor: '#4CAF50',
         // backgroundColor: '#7E57C2',
         icon: require('../images/icons8-test_partial_passed.png')
+      },
+      4: {
+        page: 4,
+        name: 'Summary',
+        backgroundColor: '#FFc107',
+        // backgroundColor: '#7E57C2',
+        icon: require('../images/icons8-list.png')
       }
     };
   }
@@ -194,6 +201,8 @@ export default class AppState {
       this.currentIndex = 2;
     } else if (keyword.indexOf('probable') != -1) {
       this.currentIndex = 3;
+    } else if (keyword.indexOf('summary') != -1) {
+      this.currentIndex = 4;
     }
 
     if (keyword.indexOf('allerg') != -1) {
