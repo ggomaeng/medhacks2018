@@ -96,7 +96,7 @@ export default class Appointment extends React.Component {
           fullscreen
           defaultValue={now}
           type={this.state.type}
-          style={{ width: '100%' }}
+          style={{ width: '100%', height: '100%' }}
           locale={cn ? zhCN : enUS}
           dateCellContentRender={e => this.renderEvent(e)}
         />

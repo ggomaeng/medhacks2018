@@ -159,7 +159,7 @@ export default class App extends Component {
     `;
 
     return (
-      <Footer>
+      <Footer style={{ zIndex: 1000 }}>
         {Object.keys(pages).map((i, index) => {
           const Icon = styled.img`
             width: ${index === currentIndex ? '64px' : '48px'};
@@ -195,7 +195,12 @@ export default class App extends Component {
       <div className="wrapper">
         <Speech />
         <FlexView style={{ width, height }}>
-          <FlexView style={{ width: width / 2, backgroundColor: '#f7f7f7' }}>
+          <FlexView
+            style={{
+              width: width / 2,
+              backgroundColor: '#f7f7f7'
+            }}
+          >
             {this.renderSideBar()}
           </FlexView>
           <FlexView column grow={1}>
@@ -205,7 +210,9 @@ export default class App extends Component {
               style={{
                 backgroundColor: 'white',
                 position: 'relative',
-                height: height / 8
+                height: height / 8,
+                width: width / 2,
+                overflow: 'hidden'
               }}
             >
               {!muted && <SoundVisualizer />}
