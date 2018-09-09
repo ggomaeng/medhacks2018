@@ -102,7 +102,7 @@ export default class AppState {
       3: {
         page: 3,
         data: [],
-        name: 'Summary',
+        name: 'Assessment',
         backgroundColor: '#4CAF50',
         // backgroundColor: '#7E57C2',
         icon: require('../images/icons8-test_partial_passed.png')
@@ -165,6 +165,13 @@ export default class AppState {
     // this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 15 && finalTranscript.length < 280) {
+      if (
+        finalTranscript.indexOf('probable') != -1 ||
+        finalTranscript.indexOf('diagnosis') != -1 ||
+        finalTranscript.indexOf('hypertension') != -1
+      ) {
+        this.pages[3].data.push(finalTranscript);
+      }
       this.sendToWit(finalTranscript);
     }
   }
@@ -176,6 +183,7 @@ export default class AppState {
       this.currentIndex = 0;
     } else if (keyword.indexOf('symptoms') != -1) {
       this.currentIndex = 0;
+      this.sideBarScrollTo('allergies');
     } else if (
       keyword.indexOf('prescription') != -1 ||
       keyword.indexOf('medication') != -1
@@ -184,7 +192,7 @@ export default class AppState {
       this.sideBarScrollTo('medication');
     } else if (keyword.indexOf('appointment') != -1) {
       this.currentIndex = 2;
-    } else if (keyword.indexOf('summary') != -1) {
+    } else if (keyword.indexOf('probable') != -1) {
       this.currentIndex = 3;
     }
 
