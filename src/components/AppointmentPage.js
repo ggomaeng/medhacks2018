@@ -41,6 +41,10 @@ export default class Appointment extends React.Component {
     });
   };
 
+  renderEvent(e){
+    return (<div><p>meeting @ some time</p></div>);
+  }
+
   render() {
     return (
       <FlexView grow={1}>
@@ -61,6 +65,7 @@ export default class Appointment extends React.Component {
           type={this.state.type}
           onTypeChange={this.onTypeChange}
           locale={cn ? zhCN : enUS}
+          dateCellContentRender={(e) => this.renderEvent(e)}
         />
       </FlexView>
     );
