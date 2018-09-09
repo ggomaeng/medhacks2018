@@ -167,7 +167,10 @@ export default class AppState {
 
     if (keyword.indexOf('allerg') != -1) {
       this.sideBarScrollTo('allergies');
-    } else if (keyword.indexOf('surg') != -1 || keyword.indexOf('medi') != -1) {
+    } else if (
+      keyword.indexOf('surg') != -1 ||
+      keyword.indexOf('medical') != -1
+    ) {
       this.sideBarScrollTo('surgical');
     } else if (keyword.indexOf('history') != -1) {
       this.sideBarScrollTo('shistory');

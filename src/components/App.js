@@ -183,7 +183,7 @@ export default class App extends Component {
 
   render() {
     const { width, height } = this.props;
-    const { muted, showPatientHistory } = this.store;
+    const { muted, showPatientHistory, currentIndex } = this.store;
     return (
       <div className="wrapper">
         <Speech />

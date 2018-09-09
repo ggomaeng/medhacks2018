@@ -183,11 +183,12 @@ export default class ProfilePage extends Component {
     );
   }
   render() {
+    const { currentIndex } = this.store;
     const CustomScrollFlexView = styled(FlexView)`
       padding-left: 16px;
       padding-top: 16px;
       padding-right: 16px;
-      overflow: scroll;
+      overflow: ${currentIndex == 2 ? 'hidden' : 'scroll'};
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         width: 15px;
