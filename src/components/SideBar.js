@@ -16,6 +16,10 @@ export default class ProfilePage extends Component {
     this.store.setSideBarScrollTo(this.scrollTo);
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   scrollTo(id) {
     console.log('scrolling to', id);
     const element = document.getElementById(id);
@@ -97,7 +101,7 @@ export default class ProfilePage extends Component {
 
         <Panel
           id="medication"
-          bsStyle="warning"
+          bsStyle="danger"
           ref={v => (this.medication = v)}
         >
           <Panel.Heading>
@@ -115,7 +119,39 @@ export default class ProfilePage extends Component {
                 <ListGroupItem header="Protonix">
                   Discontinued 12-18 months ago
                 </ListGroupItem>
+                <ListGroupItem header="Percocet">
+                  2 tablets 4 times a day
+                </ListGroupItem>
+                <ListGroupItem header="Neurontin">
+                  1 tablet b.i.d. 600 mg
+                </ListGroupItem>
+                <ListGroupItem header="Cipro">
+                  recently started 500 b.i.d., Humulin N 30 units twice a day.
+                  The patient had recently reduced that to 24 units
+                </ListGroupItem>
+                <ListGroupItem header="MiraLax">1 scoop nightly</ListGroupItem>
+                <ListGroupItem header="Avandia">4 mg b.i.d.</ListGroupItem>
+                <ListGroupItem header="Flexeril">1 tablet t.i.d.</ListGroupItem>
+                <ListGroupItem header="Synthroid">125 mcg daily</ListGroupItem>
+                <ListGroupItem header="Coumadin">5 mg</ListGroupItem>
+                <ListGroupItem header="Ibuprofen" />
+                <ListGroupItem header="Lasix">40 mg b.i.d.</ListGroupItem>
+                <ListGroupItem header="Lipitor">20 mg nightly</ListGroupItem>
+                <ListGroupItem header="Reglan">t.i.d. 5 mg</ListGroupItem>
+                <ListGroupItem header="Nystatin">powder</ListGroupItem>
+                <ListGroupItem header="Oxygen">chronically</ListGroupItem>
               </ListGroup>
+              Note:
+              <p>
+                Percocet 2 tablets 4 times a day, Neurontin 1 tablet b.i.d. 600
+                mg, Cipro recently started 500 b.i.d., Humulin N 30 units twice
+                a day. The patient had recently reduced that to 24 units.
+                MiraLax 1 scoop nightly, Avandia 4 mg b.i.d., Flexeril 1 tablet
+                t.i.d., Synthroid 125 mcg daily, Coumadin 5 mg. On the medical
+                records, it shows she is also on ibuprofen, Lasix 40 mg b.i.d.,
+                Lipitor 20 mg nightly, Reglan t.i.d. 5 mg, Nystatin powder. She
+                is on oxygen chronically.
+              </p>
             </div>
           </Panel.Body>
         </Panel>
@@ -183,12 +219,13 @@ export default class ProfilePage extends Component {
     );
   }
   render() {
-    const { currentIndex } = this.store;
+    const { currentIndex } = this.props;
+    console.log('RERENDERING SIDEBAR');
     const CustomScrollFlexView = styled(FlexView)`
       padding-left: 16px;
       padding-top: 16px;
       padding-right: 16px;
-      overflow: ${currentIndex == 2 ? 'hidden' : 'scroll'};
+      overflow: scroll;
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         width: 15px;

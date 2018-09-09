@@ -22,6 +22,8 @@ import { INTENT_TYPES } from '../stores/AppState';
 import ProfilePage from './ProfilePage';
 import AppointmentPage from './AppointmentPage';
 import SummaryPage from './SummaryPage';
+import SymptomsPage from './SymptomsPage';
+import MedicationPage from './MedicationPage';
 
 @withRouter
 @withSizes(({ width, height }) => ({ width, height }))
@@ -88,8 +90,12 @@ export default class App extends Component {
   }
 
   renderPage() {
-    const { currentIndex, pages } = this.store;
-    if (currentIndex == 2) {
+    const { currentIndex, appointments, pages } = this.store;
+    if (currentIndex == 0) {
+      return <SymptomsPage />;
+    } else if (currentIndex == 1) {
+      return <MedicationPage />;
+    } else if (currentIndex == 2) {
       return <AppointmentPage />;
     } else if (currentIndex == 3) {
       return <SummaryPage />;
@@ -178,12 +184,13 @@ export default class App extends Component {
   }
 
   renderSideBar() {
-    return <SideBar />;
+    const { currentIndex } = this.store;
+    return <SideBar currentIndex={currentIndex} />;
   }
 
   render() {
     const { width, height } = this.props;
-    const { muted, showPatientHistory, currentIndex } = this.store;
+    const { muted } = this.store;
     return (
       <div className="wrapper">
         <Speech />

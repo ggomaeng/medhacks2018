@@ -3,12 +3,13 @@ import axios from 'axios';
 import users from './users';
 import scrollToComponent from 'react-scroll-to-component';
 import SideBar from '../components/SideBar';
+import moment from 'moment';
 
 const { Wit, log } = require('node-wit');
 
 require('dotenv').config();
 const client = new Wit({
-  accessToken: 'S7FKE2WDXYUC64ZGJINH4TSWM2ZGOV5G'
+  accessToken: '54HLNGDHR66JXEQJR2P2V2GQ2WFT3D6S'
   // logger: new log.Logger(log.DEBUG) // optional
 });
 
@@ -20,7 +21,7 @@ export const INTENT_TYPES = {
   INTENT_PRESCRIPTION_PICK_UP: 'prescription_pickup',
   INTENT_QUERY_HISTORY: 'query_history',
   INTENT_RECALL_HISTORY: 'recall_history',
-  INTENT_APPOINTMENTS: 'appointments'
+  INTENT_APPOINTMENTS: 'appointment'
 };
 
 export const PAGE_TYPES = [];
@@ -47,9 +48,15 @@ export default class AppState {
   @observable
   currentUser;
 
+  @observable
+  appointments;
+
   sideBarScrollTo;
 
+  lastScrollTo;
+
   constructor() {
+    this.lastScrollTo = null;
     this.sideBarScrollTo = null;
     this.currentIndex = 0;
     this.muted = true;
@@ -57,12 +64,15 @@ export default class AppState {
     this.words = [];
     this.finalTranscript = '';
     this.currentUser = users.Jisoo;
+    this.appointments = this.currentUser.appointments;
     //data
     this.columns = {
       [INTENT_TYPES.INTENT_DESCRIPTION]: [{ id: 'hello', text: 'hello' }],
       [INTENT_TYPES.INTENT_SYMPTOMS]: [{ id: 'hi', text: 'hi' }],
       [INTENT_TYPES.INTENT_APPOINTMENTS]: [{ id: 'appo', text: 'appo' }],
-      [INTENT_TYPES.INTENT_PRESCRIPTION]: [{ id: 'presc', text: 'medication_dose' }]
+      [INTENT_TYPES.INTENT_PRESCRIPTION]: [
+        { id: 'presc', text: 'medication_dose' }
+      ]
     };
 
     this.pages = {
@@ -83,7 +93,7 @@ export default class AppState {
       },
       2: {
         page: 2,
-        data: [],
+        data: users.Jisoo.appointments,
         name: 'Appointments',
         // backgroundColor: '#4CAF50',
         backgroundColor: '#7E57C2',
@@ -121,6 +131,11 @@ export default class AppState {
   }
 
   @action
+  deleteItem(page, index) {
+    this.pages[page].data.splice(index, 1);
+  }
+
+  @action
   addWord(word) {
     console.log('adding word', word);
     this.words.push(word);
@@ -134,7 +149,7 @@ export default class AppState {
 
   @action
   addPrescription(columnNum, medicine, dose, unit) {
-    this.columns[columnNum].push({ text: medicine + '-' + dose + unit});
+    this.columns[columnNum].push({ text: medicine + '-' + dose + unit });
   }
 
   @action
@@ -149,7 +164,7 @@ export default class AppState {
     console.log('final transcript', finalTranscript);
     // this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
-    if (finalTranscript.length > 0 && finalTranscript.length < 280) {
+    if (finalTranscript.length > 15 && finalTranscript.length < 280) {
       this.sendToWit(finalTranscript);
     }
   }
@@ -175,13 +190,16 @@ export default class AppState {
 
     if (keyword.indexOf('allerg') != -1) {
       this.sideBarScrollTo('allergies');
+      this.lastScrollTo = 'allergies';
     } else if (
       keyword.indexOf('surg') != -1 ||
       keyword.indexOf('medical') != -1
     ) {
       this.sideBarScrollTo('surgical');
+      this.lastScrollTo = 'surgical';
     } else if (keyword.indexOf('history') != -1) {
       this.sideBarScrollTo('shistory');
+      this.lastScrollTo = 'shistory';
     }
   }
 
@@ -195,6 +213,11 @@ export default class AppState {
     this.finalTranscript = '';
     this.muted = !this.muted;
     console.log('muted', this.muted);
+  }
+
+  @action
+  addAppointment(date) {
+    console.log('adding appointment', date);
   }
 
   @action
@@ -212,26 +235,38 @@ export default class AppState {
               case INTENT_TYPES.INTENT_SYMPTOMS:
                 console.log('symptoms!!!');
                 console.log(JSON.stringify(entities.symptom));
-                let symptoms = entities.diagnosis.map(s => {
-                    return this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, s.value);;
-                });
-                // this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, entities.symptom[0].value);
-                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_SYMPTOMS]));
+                this.pages[0].data.push({ timestamp: moment(), entities });
+                this.currentIndex = 0;
                 break;
               case INTENT_TYPES.INTENT_PRESCRIPTION:
                 console.log('prescription!!!');
                 console.log(JSON.stringify(entities.prescription));
-                let prescriptions = entities.direction.map(p => {
-                    return this.addPrescription(INTENT_TYPES.INTENT_PRESCRIPTION, p.entities.medicine, p.entities.number, p.entities.unit);
-                });
-                // this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, entities.symptom[0].value);
-                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_PRESCRIPTION]));
+                if (entities.direction) {
+                  this.pages[1].data.push({
+                    timestamp: moment(),
+                    entities: entities.direction[0].entities
+                  });
+                } else {
+                  this.pages[1].data.push({
+                    timestamp: moment(),
+                    entities
+                  });
+                }
+                this.currentIndex = 1;
                 break;
               case INTENT_TYPES.INTENT_APPOINTMENTS:
                 console.log('appointments!!!');
-                console.log(entities.datetime[0].value);
-                this.addWord(INTENT_TYPES.INTENT_APPOINTMENTS, entities.datetime[0].value);
-                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_APPOINTMENTS]));
+                const date =
+                  entities.datetime &&
+                  entities.datetime[0] &&
+                  entities.datetime[0].value;
+                const yearstamp = moment(date).format('YYYY-MM-DD');
+                const time = moment(date).format('hh:mm a');
+
+                this.pages[2].data.push({ yearstamp, time });
+
+                console.log('added a new appointment');
+                this.currentIndex = 2;
                 break;
             }
           }

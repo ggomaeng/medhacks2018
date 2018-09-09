@@ -12,6 +12,8 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
 import FlexView from 'react-flexview/lib';
+import styled from 'styled-components';
+import { inject, observer } from 'mobx-react';
 
 const format = 'YYYY-MM-DD';
 const cn = location.search.indexOf('cn') !== -1;
@@ -29,43 +31,74 @@ defaultCalendarValue.add(-1, 'month');
 function onSelect(value) {
   console.log('select', value.format(format));
 }
-
+@inject('store')
+@observer
 export default class Appointment extends React.Component {
+  constructor(props) {
+    super(props);
+    this.store = this.props.store.appState;
+  }
   state = {
-    type: 'month'
+    type: 'date'
   };
 
   onTypeChange = type => {
+    console.log(type);
     this.setState({
       type
     });
   };
+  renderEvent(m) {
+    const { pages } = this.store;
 
-  renderEvent(e){
-    return (<div><p>meeting @ some time</p></div>);
+    const D = styled.p`
+      color: #008dcd;
+    `;
+
+    let content = '';
+    const date = m.format('YYYY-MM-DD');
+    // if (date in appointments) {
+    //   appointments[date].map(d => {
+    // content += d + '\n';
+    //   });
+    // }
+
+    pages[2].data.map((a, index) => {
+      if (a.yearstamp == date) {
+        content += a.time + '\n';
+      }
+    });
+
+    return (
+      <div>
+        <D>{m.format('D')}</D>
+        <p>{content}</p>
+      </div>
+    );
+  }
+
+  randomDate() {
+    return new Date(
+      +new Date() - Math.floor(Math.random() * 10000000000)
+    ).toString();
+  }
+
+  getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
   }
 
   render() {
     return (
       <FlexView grow={1}>
-        {/* <FullCalendar
-          style={{ margin: 10 }}
-          Select={Select}
-          fullscreen={false}
-          onSelect={onSelect}
-          defaultValue={now}
-          locale={cn ? zhCN : enUS}
-        /> */}
         <FullCalendar
           style={{ margin: 10 }}
           Select={Select}
           fullscreen
           defaultValue={now}
-          onSelect={onSelect}
           type={this.state.type}
-          onTypeChange={this.onTypeChange}
+          style={{ width: '100%' }}
           locale={cn ? zhCN : enUS}
-          dateCellContentRender={(e) => this.renderEvent(e)}
+          dateCellContentRender={e => this.renderEvent(e)}
         />
       </FlexView>
     );
