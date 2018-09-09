@@ -4,8 +4,10 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js",
+    "start": "node server.js",
+    "dev": "webpack-dev-server --config webpack.config.js",
     "build": "rimraf ./dist && webpack --config webpack.config.production.js",
+    "heroku-postbuild": "rimraf ./dist && webpack -p",
     "preview": "pushstate-server ./dist 1234",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

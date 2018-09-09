@@ -180,8 +180,8 @@ export default class AppState {
       keyword.indexOf('prescription') != -1 ||
       keyword.indexOf('medication') != -1
     ) {
-      this.sideBarScrollTo('medication');
       this.currentIndex = 1;
+      this.sideBarScrollTo('medication');
     } else if (keyword.indexOf('appointment') != -1) {
       this.currentIndex = 2;
     } else if (keyword.indexOf('summary') != -1) {
@@ -230,6 +230,13 @@ export default class AppState {
         if (entities) {
           const intent_type =
             entities && entities.intent && entities.intent[0].value;
+          const intent_confidence =
+            entities && entities.intent && entities.intent[0].confidence;
+          if (intent_confidence < 0.9) {
+            console.log('confidence too low', intent_confidence);
+            return;
+          }
+          console.log('confidence is good ', intent_confidence);
           if (intent_type) {
             switch (intent_type) {
               case INTENT_TYPES.INTENT_SYMPTOMS:
