@@ -161,6 +161,9 @@ export default class AppState {
 
   @action
   setFinalTranscript(finalTranscript) {
+    if (finalTranscript.indexOf('microphone') != -1) {
+      this.muted = !this.muted;
+    }
     if (this.muted) {
       console.log("muted, shouldn't listen");
       return;
@@ -204,7 +207,6 @@ export default class AppState {
     } else if (keyword.indexOf('summary') != -1) {
       this.currentIndex = 4;
     }
-
     if (keyword.indexOf('allerg') != -1) {
       this.sideBarScrollTo('allergies');
       this.lastScrollTo = 'allergies';
