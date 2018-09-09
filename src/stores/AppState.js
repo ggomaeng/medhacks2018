@@ -6,7 +6,7 @@ const { Wit, log } = require('node-wit');
 
 require('dotenv').config();
 const client = new Wit({
-  accessToken: 'ISLAJPXHMGA7LNJGYZPPYRKEDM3WEXSX'
+  accessToken: 'S7FKE2WDXYUC64ZGJINH4TSWM2ZGOV5G'
   // logger: new log.Logger(log.DEBUG) // optional
 });
 
@@ -17,7 +17,8 @@ export const INTENT_TYPES = {
   INTENT_PRESCRIPTION: 'prescription',
   INTENT_PRESCRIPTION_PICK_UP: 'prescription_pickup',
   INTENT_QUERY_HISTORY: 'query_history',
-  INTENT_RECALL_HISTORY: 'recall_history'
+  INTENT_RECALL_HISTORY: 'recall_history',
+  INTENT_APPOINTMENTS: 'appointments'
 };
 
 export const PAGE_TYPES = [];
@@ -54,7 +55,9 @@ export default class AppState {
     //data
     this.columns = {
       [INTENT_TYPES.INTENT_DESCRIPTION]: [{ id: 'hello', text: 'hello' }],
-      [INTENT_TYPES.INTENT_SYMPTOMS]: [{ id: 'hi', text: 'hi' }]
+      [INTENT_TYPES.INTENT_SYMPTOMS]: [{ id: 'hi', text: 'hi' }],
+      [INTENT_TYPES.INTENT_APPOINTMENTS]: [{ id: 'appo', text: 'appo' }],
+      [INTENT_TYPES.INTENT_PRESCRIPTION]: [{ id: 'presc', text: 'medication_dose' }]
     };
 
     this.pages = {
@@ -121,6 +124,11 @@ export default class AppState {
   }
 
   @action
+  addPrescription(columnNum, medicine, dose, unit) {
+    this.columns[columnNum].push({ text: medicine + '-' + dose + unit});
+  }
+
+  @action
   setFinalTranscript(finalTranscript) {
     if (this.muted) {
       console.log("muted, shouldn't listen");
@@ -133,7 +141,7 @@ export default class AppState {
     // this.addWord(1, finalTranscript);
     this.finalTranscript = finalTranscript;
     if (finalTranscript.length > 0 && finalTranscript.length < 280) {
-      // this.sendToWit(finalTranscript);
+      this.sendToWit(finalTranscript);
     }
   }
 
@@ -182,9 +190,27 @@ export default class AppState {
             switch (intent_type) {
               case INTENT_TYPES.INTENT_SYMPTOMS:
                 console.log('symptoms!!!');
-                console.log(entities.symptom[INTENT_SYMPTOMS].value);
-                this.addWord(1, entities.symptom[0].value);
-                console.log(JSON.stringify(this.columns[INTENT_SYMPTOMS]));
+                console.log(JSON.stringify(entities.symptom));
+                let symptoms = entities.diagnosis.map(s => {
+                    return this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, s.value);;
+                });
+                // this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, entities.symptom[0].value);
+                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_SYMPTOMS]));
+                break;
+              case INTENT_TYPES.INTENT_PRESCRIPTION:
+                console.log('prescription!!!');
+                console.log(JSON.stringify(entities.prescription));
+                let prescriptions = entities.direction.map(p => {
+                    return this.addPrescription(INTENT_TYPES.INTENT_PRESCRIPTION, p.entities.medicine, p.entities.number, p.entities.unit);
+                });
+                // this.addWord(INTENT_TYPES.INTENT_SYMPTOMS, entities.symptom[0].value);
+                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_PRESCRIPTION]));
+                break;
+              case INTENT_TYPES.INTENT_APPOINTMENTS:
+                console.log('appointments!!!');
+                console.log(entities.datetime[0].value);
+                this.addWord(INTENT_TYPES.INTENT_APPOINTMENTS, entities.datetime[0].value);
+                console.log(JSON.stringify(this.columns[INTENT_TYPES.INTENT_APPOINTMENTS]));
                 break;
             }
           }
